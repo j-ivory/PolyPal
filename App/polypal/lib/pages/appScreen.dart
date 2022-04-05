@@ -22,11 +22,13 @@ class _AppScreenState extends State<AppScreen> {
   //end of variables
 
   //METHODS start
-  void createTimer() {
+  void createTimer(int bpm) {
     if (!_timer.isActive) {
       //if timer not active create a timer
+      double quarterNoteDurationMilli = 60000 / bpm;
+      int durMilli = quarterNoteDurationMilli.round();
       print('Timer Created');
-      Timer.periodic(const Duration(milliseconds: 2 * 1000), (timer) {
+      Timer.periodic(Duration(milliseconds: durMilli), (timer) {
         SystemSound.play(SystemSoundType.click);
         _timer = timer;
       });
@@ -135,7 +137,9 @@ class _AppScreenState extends State<AppScreen> {
                     onPressed: startButtonEnabled
                         ? () {
                             SystemSound.play(SystemSoundType.click);
-                            createTimer();
+                            int userBPM = int.parse(bpmTextField.text);
+                            print('$userBPM BPM');
+                            createTimer(userBPM);
                             setState(() {
                               stopButtonEnabled = true;
                               startButtonEnabled = false;
@@ -150,7 +154,7 @@ class _AppScreenState extends State<AppScreen> {
                         ? () {
                             //if buttonenabled == true then pass a function otherwise pass "null"
                             SystemSound.play(SystemSoundType.click);
-                            print('cancel timer');
+                            print('Timer Canceled');
                             _timer.cancel();
                             setState(() {
                               stopButtonEnabled = false;
@@ -168,3 +172,5 @@ class _AppScreenState extends State<AppScreen> {
     );
   }
 }
+
+//ToDo: add parameters for bpm in createtimer function
