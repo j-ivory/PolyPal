@@ -19,60 +19,31 @@ class _AppScreenState extends State<AppScreen> {
 
   bool startButtonEnabled = true;
   bool stopButtonEnabled = false;
+  int counter = 0;
+  int? ticks;
   //end of variables
 
   //METHODS start
-  void createTimer(int bpm, int subDiv) {
+  void createTimer(int bpm, int subDiv1, int subDiv2) {
     if (!_timer.isActive) {
       //if timer not active create a timer
-      double noteDurationMilli;
-      switch (subDiv) {
-        case 1:
-          {
-            noteDurationMilli = 60000 / bpm * 4;
-          }
-          break;
-        case 2:
-          {
-            noteDurationMilli = 60000 / bpm * 2;
-          }
-          break;
-        case 3:
-          {
-            noteDurationMilli = 60000 / bpm * 4 / 3;
-          }
-          break;
-        case 4: //quarter note
-          {
-            noteDurationMilli = 60000 / bpm;
-          }
-          break;
-        case 5:
-          {
-            noteDurationMilli = 60000 / bpm * 4 / 5;
-          }
-          break;
-        case 6:
-          {
-            noteDurationMilli = 60000 / bpm * 4 / 6;
-          }
-          break;
-        case 7:
-          {
-            noteDurationMilli = 60000 / bpm * 4 / 7;
-          }
-          break;
-        default:
-          {
-            noteDurationMilli = 60000 / bpm;
-          }
-      }
+      ticks = subDiv1 * subDiv2;
+      print('$ticks');
+      double x = 60000 / bpm * 4 / ticks!;
+      int tickDurMilli = x.round();
+      print('$tickDurMilli');
 
-      int durMilli = noteDurationMilli.round();
+      //int durMilli = noteDurationMilli.round();
       print('Timer Created');
-      Timer.periodic(Duration(milliseconds: durMilli), (timer) {
-        SystemSound.play(SystemSoundType.click);
+      Timer.periodic(Duration(milliseconds: tickDurMilli), (timer) {
+        if (counter % subDiv2 == 0) {
+          SystemSound.play(SystemSoundType.click); //play subdiv1
+        }
+        if (counter % subDiv1 == 0) {
+          SystemSound.play(SystemSoundType.click); //play subdiv2
+        }
         _timer = timer;
+        counter++;
       });
     } else {
       print('Timer already active');
@@ -171,7 +142,7 @@ class _AppScreenState extends State<AppScreen> {
                       const Spacer(),
                       numField(),
                       const Spacer(),
-                      //subdivisionDropdown2(),
+                      subdivisionDropdown2(),
                       const Spacer(),
                     ],
                   ),
@@ -181,7 +152,8 @@ class _AppScreenState extends State<AppScreen> {
                             SystemSound.play(SystemSoundType.click);
                             int userBPM = int.parse(bpmTextField.text);
                             print('$userBPM BPM');
-                            createTimer(userBPM, _currentSubDivSelection1);
+                            createTimer(userBPM, _currentSubDivSelection1,
+                                _currentSubDivSelection2);
                             setState(() {
                               stopButtonEnabled = true;
                               startButtonEnabled = false;
@@ -235,3 +207,46 @@ class SubDivDropdownMenu extends StatelessWidget {
     return Container();
   }
 }
+
+//       double noteDurationMilli;
+//       switch (subDiv1) {
+//         case 1:
+//           {
+//             noteDurationMilli = 60000 / bpm * 4;
+//           }
+//           break;
+//         case 2:
+//           {
+//             noteDurationMilli = 60000 / bpm * 2;
+//           }
+//           break;
+//         case 3:
+//           {
+//             noteDurationMilli = 60000 / bpm * 4 / 3;
+//           }
+//           break;
+//         case 4: //quarter note
+//           {
+//             noteDurationMilli = 60000 / bpm;
+//           }
+//           break;
+//         case 5:
+//           {
+//             noteDurationMilli = 60000 / bpm * 4 / 5;
+//           }
+//           break;
+//         case 6:
+//           {
+//             noteDurationMilli = 60000 / bpm * 4 / 6;
+//           }
+//           break;
+//         case 7:
+//           {
+//             noteDurationMilli = 60000 / bpm * 4 / 7;
+//           }
+//           break;
+//         default:
+//           {
+//             noteDurationMilli = 60000 / bpm;
+//           }
+//       }
