@@ -11,7 +11,7 @@ class AppScreen extends StatefulWidget {
 
 class _AppScreenState extends State<AppScreen> {
   //VARIABLES start
-  TextEditingController bpmTextField = TextEditingController();
+  TextEditingController bpmTextField = TextEditingController(text: '120');
   int _currentSubDivSelection1 = 1;
   int _currentSubDivSelection2 = 1;
   Timer _timer =
@@ -22,11 +22,53 @@ class _AppScreenState extends State<AppScreen> {
   //end of variables
 
   //METHODS start
-  void createTimer(int bpm) {
+  void createTimer(int bpm, int subDiv) {
     if (!_timer.isActive) {
       //if timer not active create a timer
-      double quarterNoteDurationMilli = 60000 / bpm;
-      int durMilli = quarterNoteDurationMilli.round();
+      double noteDurationMilli;
+      switch (subDiv) {
+        case 1:
+          {
+            noteDurationMilli = 60000 / bpm * 4;
+          }
+          break;
+        case 2:
+          {
+            noteDurationMilli = 60000 / bpm * 2;
+          }
+          break;
+        case 3:
+          {
+            noteDurationMilli = 60000 / bpm * 4 / 3;
+          }
+          break;
+        case 4: //quarter note
+          {
+            noteDurationMilli = 60000 / bpm;
+          }
+          break;
+        case 5:
+          {
+            noteDurationMilli = 60000 / bpm * 4 / 5;
+          }
+          break;
+        case 6:
+          {
+            noteDurationMilli = 60000 / bpm * 4 / 6;
+          }
+          break;
+        case 7:
+          {
+            noteDurationMilli = 60000 / bpm * 4 / 7;
+          }
+          break;
+        default:
+          {
+            noteDurationMilli = 60000 / bpm;
+          }
+      }
+
+      int durMilli = noteDurationMilli.round();
       print('Timer Created');
       Timer.periodic(Duration(milliseconds: durMilli), (timer) {
         SystemSound.play(SystemSoundType.click);
@@ -139,7 +181,7 @@ class _AppScreenState extends State<AppScreen> {
                             SystemSound.play(SystemSoundType.click);
                             int userBPM = int.parse(bpmTextField.text);
                             print('$userBPM BPM');
-                            createTimer(userBPM);
+                            createTimer(userBPM, _currentSubDivSelection1);
                             setState(() {
                               stopButtonEnabled = true;
                               startButtonEnabled = false;
@@ -173,4 +215,23 @@ class _AppScreenState extends State<AppScreen> {
   }
 }
 
-//ToDo: add parameters for bpm in createtimer function
+////ToDo: add parameters for bpm in createtimer function
+//ToDo: add parameters for subDiv in createtimer function
+//ToDo: create a second callback within timer callback that fires at another indicated subDiv/pulse
+//ToDo: add parameters for second subDiv in createtimer function
+
+//somehow all these puzzle pieces rearrange around me
+//i feel the same as i always did
+//what does life expect of me
+//take it slow.
+
+class SubDivDropdownMenu extends StatelessWidget {
+  const SubDivDropdownMenu({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
