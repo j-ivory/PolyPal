@@ -31,7 +31,7 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
   //animation end
 
   //VARIABLES start
-  TextEditingController bpmTextField = TextEditingController(text: '120');
+  TextEditingController bpmTextField = TextEditingController(text: '90');
   int _currentSubDivSelection1 = 1;
   int _currentSubDivSelection2 = 1;
   Timer _timer =

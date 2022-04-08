@@ -90,7 +90,8 @@ class LaunchScreen extends StatelessWidget {
                         textStyle: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
-                          color: Color.fromARGB(255, 76, 108, 119),
+                          color: //Color.fromARGB(255, 255, 191,0),
+                              Color.fromARGB(255, 76, 108, 119),
                         ),
                       ),
                       //WavyAnimatedText('Second Text'),
