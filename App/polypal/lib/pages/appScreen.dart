@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:polypal/pages/launchScreen.dart';
 
@@ -226,12 +227,25 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
                   const Spacer(),
                   Column(
                     children: <Widget>[
-                      RotationTransition(
-                        turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-                        child: CustomPaint(
-                          painter: ShapePainter(),
-                          child: Container(),
-                        ),
+                      Stack(
+                        children: <Widget>[
+                          CustomPaint(
+                            painter: SubDivPainter1(_currentSubDivSelection1),
+                            child: Container(),
+                          ),
+                          CustomPaint(
+                            painter: SubDivPainter2(_currentSubDivSelection2),
+                            child: Container(),
+                          ),
+                          RotationTransition(
+                            turns: Tween(begin: 0.0, end: 1.0)
+                                .animate(_controller),
+                            child: CustomPaint(
+                              painter: ShapePainter(),
+                              child: Container(),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 150,
@@ -307,6 +321,172 @@ class ShapePainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class SubDivPainter1 extends CustomPainter {
+  int subdivisions;
+  SubDivPainter1(this.subdivisions); //constructor
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.amber
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    double xCenter = size.width / 2;
+    double yCenter = size.height / 2;
+    //Offset center = Offset(xCenter, yCenter);
+
+    //canvas.drawCircle(center, 50, paint);
+    //canvas.drawCircle(Offset(size.width / 2, size.height / 2 - 100), 5, paint);
+
+    double xIns = 0;
+    double yIns = 65;
+
+    double theta = 360 / subdivisions;
+    double Xins = xIns * math.cos(theta) + yIns * math.sin(theta);
+    double Yins = -xIns * math.sin(theta) + yIns * math.cos(theta);
+
+    switch (subdivisions) {
+      case 1:
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        break;
+      case 2:
+        {
+          for (int i = 1; i <= subdivisions; i++) {
+            double rotationTheta = 360 / subdivisions;
+            theta = rotationTheta * i;
+            Xins = (xIns * math.cos(theta)) + (yIns * math.sin(theta));
+            Yins = (-xIns * math.sin(theta)) + (yIns * math.cos(theta));
+
+            canvas.drawLine(Offset(xCenter + Xins, yCenter + Yins),
+                Offset(xCenter, yCenter), paint);
+          }
+
+          // canvas.drawLine(Offset(xCenter, yCenter - 65),
+          //     Offset(xCenter, yCenter - 95), paint);
+          // canvas.drawLine(Offset(xCenter, yCenter + 65),
+          //     Offset(xCenter, yCenter + 95), paint);
+        }
+        break;
+      case 3:
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        canvas.drawLine(Offset(xCenter - 56.291, yCenter + 32.5),
+            Offset(xCenter - 82.272, yCenter + 47.5), paint);
+        canvas.drawLine(Offset(xCenter + 56.291, yCenter + 32.5),
+            Offset(xCenter + 82.272, yCenter + 47.5), paint);
+        break;
+      case 4:
+        {
+          canvas.drawLine(Offset(xCenter, yCenter - 65),
+              Offset(xCenter, yCenter - 95), paint);
+          canvas.drawLine(Offset(xCenter, yCenter + 65),
+              Offset(xCenter, yCenter + 95), paint);
+          canvas.drawLine(Offset(xCenter - 65, yCenter),
+              Offset(xCenter - 95, yCenter), paint);
+          canvas.drawLine(Offset(xCenter + 65, yCenter),
+              Offset(xCenter + 95, yCenter), paint);
+        }
+        break;
+      case 5:
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        break;
+      case 6:
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        break;
+      case 7:
+        canvas.drawLine(Offset(xCenter, yCenter - 65),
+            Offset(xCenter, yCenter - 95), paint);
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class SubDivPainter2 extends CustomPainter {
+  int subdivisions;
+  SubDivPainter2(this.subdivisions); //constructor
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.greenAccent
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    double xCenter = size.width / 2;
+    double yCenter = size.height / 2;
+    //Offset center = Offset(xCenter, yCenter);
+    double r = 100;
+
+    //( x - xCenter )^2 + ( y - yCenter )^2 = r^2
+    //canvas.drawCircle(center, 50, paint);
+    //canvas.drawCircle(Offset(size.width / 2, size.height / 2 - 100), 5, paint);
+    switch (subdivisions) {
+      case 1:
+        canvas.drawLine(Offset(xCenter, yCenter - 135),
+            Offset(xCenter, yCenter - 105), paint);
+        break;
+      case 2:
+        {
+          canvas.drawLine(Offset(xCenter, yCenter - 135),
+              Offset(xCenter, yCenter - 105), paint);
+          canvas.drawLine(Offset(xCenter, yCenter + 135),
+              Offset(xCenter, yCenter + 105), paint);
+        }
+        break;
+      case 3:
+        canvas.drawLine(Offset(xCenter, yCenter - 135),
+            Offset(xCenter, yCenter - 105), paint);
+        break;
+      case 4:
+        {
+          canvas.drawLine(Offset(xCenter, yCenter - 135),
+              Offset(xCenter, yCenter - 105), paint);
+          canvas.drawLine(Offset(xCenter, yCenter + 135),
+              Offset(xCenter, yCenter + 105), paint);
+          canvas.drawLine(Offset(xCenter - 135, yCenter),
+              Offset(xCenter - 105, yCenter), paint);
+          canvas.drawLine(Offset(xCenter + 135, yCenter),
+              Offset(xCenter + 105, yCenter), paint);
+        }
+        break;
+      case 5:
+        canvas.drawLine(Offset(xCenter, yCenter - 135),
+            Offset(xCenter, yCenter - 105), paint);
+        break;
+      case 6:
+        canvas.drawLine(Offset(xCenter, yCenter - 135),
+            Offset(xCenter, yCenter - 105), paint);
+        break;
+      case 7:
+        canvas.drawLine(Offset(xCenter, yCenter - 135),
+            Offset(xCenter, yCenter - 105), paint);
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
 
