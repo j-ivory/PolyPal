@@ -343,13 +343,6 @@ class SubDivPainter1 extends CustomPainter {
     //canvas.drawCircle(center, 50, paint);
     //canvas.drawCircle(Offset(size.width / 2, size.height / 2 - 100), 5, paint);
 
-    double xIns = 0;
-    double yIns = 65;
-
-    double theta = 360 / subdivisions;
-    double Xins = xIns * math.cos(theta) + yIns * math.sin(theta);
-    double Yins = -xIns * math.sin(theta) + yIns * math.cos(theta);
-
     switch (subdivisions) {
       case 1:
         canvas.drawLine(Offset(xCenter, yCenter - 65),
@@ -357,20 +350,14 @@ class SubDivPainter1 extends CustomPainter {
         break;
       case 2:
         {
-          for (int i = 1; i <= subdivisions; i++) {
-            double rotationTheta = 360 / subdivisions;
-            theta = rotationTheta * i;
-            Xins = (xIns * math.cos(theta)) + (yIns * math.sin(theta));
-            Yins = (-xIns * math.sin(theta)) + (yIns * math.cos(theta));
+          // for (int i = 1; i <= subdivisions; i++) {
 
-            canvas.drawLine(Offset(xCenter + Xins, yCenter + Yins),
-                Offset(xCenter, yCenter), paint);
-          }
+          // }
 
-          // canvas.drawLine(Offset(xCenter, yCenter - 65),
-          //     Offset(xCenter, yCenter - 95), paint);
-          // canvas.drawLine(Offset(xCenter, yCenter + 65),
-          //     Offset(xCenter, yCenter + 95), paint);
+          canvas.drawLine(Offset(xCenter, yCenter - 65),
+              Offset(xCenter, yCenter - 95), paint);
+          canvas.drawLine(Offset(xCenter, yCenter + 65),
+              Offset(xCenter, yCenter + 95), paint);
         }
         break;
       case 3:
@@ -394,18 +381,135 @@ class SubDivPainter1 extends CustomPainter {
         }
         break;
       case 5:
-        canvas.drawLine(Offset(xCenter, yCenter - 65),
-            Offset(xCenter, yCenter - 95), paint);
-        canvas.drawLine(Offset(xCenter, yCenter - 65),
-            Offset(xCenter, yCenter - 95), paint);
+        {
+          canvas.drawLine(Offset(xCenter, yCenter - 65),
+              Offset(xCenter, yCenter - 95), paint);
+
+          double rotation = 360 / subdivisions;
+          double R = rotation / 360 * 2 * math.pi; //rotation in degrees
+          double x1 = 0;
+          double y1 = 95;
+          double X1 = x * math.cos(R) + y1 * math.sin(R);
+          double Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          double x2 = 0;
+          double y2 = 65;
+          double X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          double Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+
+          rotation = rotation * 2;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter + -Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+
+          //for (int i = 1; i <= subdivisions; i++) {
+          int i = 4;
+          rotation = rotation * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter + -Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+          //}
+          i = 5;
+          rotation = 288;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       case 6:
         canvas.drawLine(Offset(xCenter, yCenter - 65),
             Offset(xCenter, yCenter - 95), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < 3; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
+        canvas.drawLine(Offset(xCenter, yCenter + 65),
+            Offset(xCenter, yCenter + 95), paint);
+        for (int i = 4; i < subdivisions; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       case 7:
         canvas.drawLine(Offset(xCenter, yCenter - 65),
             Offset(xCenter, yCenter - 95), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < subdivisions; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 95;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 65;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       default:
         break;
@@ -414,7 +518,7 @@ class SubDivPainter1 extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }
 
@@ -452,8 +556,26 @@ class SubDivPainter2 extends CustomPainter {
         }
         break;
       case 3:
-        canvas.drawLine(Offset(xCenter, yCenter - 135),
-            Offset(xCenter, yCenter - 105), paint);
+        canvas.drawLine(Offset(xCenter, yCenter - 105),
+            Offset(xCenter, yCenter - 135), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < subdivisions; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 135;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 105;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       case 4:
         {
@@ -468,16 +590,88 @@ class SubDivPainter2 extends CustomPainter {
         }
         break;
       case 5:
-        canvas.drawLine(Offset(xCenter, yCenter - 135),
-            Offset(xCenter, yCenter - 105), paint);
+        canvas.drawLine(Offset(xCenter, yCenter - 105),
+            Offset(xCenter, yCenter - 135), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < subdivisions; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 135;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 105;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       case 6:
-        canvas.drawLine(Offset(xCenter, yCenter - 135),
-            Offset(xCenter, yCenter - 105), paint);
+        canvas.drawLine(Offset(xCenter, yCenter - 105),
+            Offset(xCenter, yCenter - 135), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < 3; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 135;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 105;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
+        canvas.drawLine(Offset(xCenter, yCenter + 135),
+            Offset(xCenter, yCenter + 105), paint);
+        for (int i = 4; i < 6; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 135;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 105;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       case 7:
-        canvas.drawLine(Offset(xCenter, yCenter - 135),
-            Offset(xCenter, yCenter - 105), paint);
+        canvas.drawLine(Offset(xCenter, yCenter - 105),
+            Offset(xCenter, yCenter - 135), paint);
+        double rotation = 360 / subdivisions;
+        double R, x1, y1, X1, Y1, x2, y2, X2, Y2;
+        for (int i = 1; i < subdivisions; i++) {
+          rotation = 360 / subdivisions * i;
+          R = rotation / 360 * 2 * math.pi;
+          x1 = 0;
+          y1 = 135;
+          X1 = x * math.cos(R) + y1 * math.sin(R);
+          Y1 = -x1 * math.sin(R) + y1 * math.cos(R);
+
+          x2 = 0;
+          y2 = 105;
+          X2 = x2 * math.cos(R) + y2 * math.sin(R);
+          Y2 = -x2 * math.sin(R) + y2 * math.cos(R);
+
+          canvas.drawLine(Offset(xCenter + X2, yCenter - Y2),
+              Offset(xCenter + X1, yCenter - Y1), paint);
+        }
         break;
       default:
         break;
@@ -486,7 +680,7 @@ class SubDivPainter2 extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+    return false; //or true? hm does false optimize ?
   }
 }
 
