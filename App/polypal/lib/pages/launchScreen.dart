@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:polypal/pages/pages.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:polypal/models/global.dart';
 
-class LaunchScreen extends StatelessWidget {
+Sounds SFXPlayer = Sounds();
+
+class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LaunchScreen> createState() => _LaunchScreenState();
+}
+
+class _LaunchScreenState extends State<LaunchScreen> {
+  @override
+  void initState() {
+    SFXPlayer.cacheSounds();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +89,7 @@ class LaunchScreen extends StatelessWidget {
                 const Spacer(flex: 2),
                 OutlinedButton(
                   onPressed: () {
+                    SFXPlayer.playLaunchSFX();
                     Navigator.push(
                       context,
                       PageRouteBuilder(
@@ -98,6 +113,7 @@ class LaunchScreen extends StatelessWidget {
                     ],
                     isRepeatingAnimation: true,
                     onTap: () {
+                      SFXPlayer.playLaunchSFX();
                       Navigator.push(
                         context,
                         PageRouteBuilder(

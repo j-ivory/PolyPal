@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:polypal/pages/launchScreen.dart';
+import 'package:polypal/models/global.dart';
 
 int x = 2;
 
@@ -26,11 +27,14 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
+
+    SFXPlayer.cacheSounds();
     super.initState();
   }
   //animation end
 
   //VARIABLES start
+  Sounds SFXPlayer = Sounds();
   TextEditingController bpmTextField = TextEditingController(text: '90');
   int _currentSubDivSelection1 = 1;
   int _currentSubDivSelection2 = 1;
