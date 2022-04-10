@@ -92,6 +92,7 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
   //end of methods
 
   //WIDGETS start
+  bool playing = false;
   Widget numField() {
     return SizedBox(
       height: 75,
@@ -106,7 +107,14 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly,
-        ], // Only numbers can be entered
+        ],
+        onTap: () {
+          if (!playing) {
+            SystemSound.play(SystemSoundType.click);
+          }
+        },
+        enabled: !playing,
+        // Only numbers can be entered
       ),
     );
   }
@@ -114,6 +122,8 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
   Widget subdivisionDropdown(int buttonNum) {
     if (buttonNum == 1) {
       return DropdownButton<int>(
+        iconEnabledColor: Colors.amberAccent,
+        dropdownColor: Colors.amberAccent,
         //Don't forget to pass your variable to the current value
         value: _currentSubDivSelection1,
         items: <int>[1, 2, 3, 4, 5, 6, 7].map((int value) {
@@ -123,14 +133,19 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
           );
         }).toList(),
         //On changed update the variable name and don't forgot the set state!
-        onChanged: (newValue) {
-          setState(() {
-            _currentSubDivSelection1 = newValue!;
-          });
-        },
+        onChanged: !playing
+            ? (newValue) {
+                SystemSound.play(SystemSoundType.click);
+                setState(() {
+                  _currentSubDivSelection1 = newValue!;
+                });
+              }
+            : null,
       );
     } else {
       return DropdownButton<int>(
+        iconEnabledColor: Colors.tealAccent,
+        dropdownColor: Colors.tealAccent,
         //Don't forget to pass your variable to the current value
         value: _currentSubDivSelection2,
         items: <int>[1, 2, 3, 4, 5, 6, 7].map((int value) {
@@ -140,11 +155,14 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
           );
         }).toList(),
         //On changed update the variable name and don't forgot the set state!
-        onChanged: (newValue) {
-          setState(() {
-            _currentSubDivSelection2 = newValue!;
-          });
-        },
+        onChanged: !playing
+            ? (newValue) {
+                SystemSound.play(SystemSoundType.click);
+                setState(() {
+                  _currentSubDivSelection2 = newValue!;
+                });
+              }
+            : null,
       );
     }
   }
@@ -275,6 +293,7 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
               setState(() {
                 stopButtonEnabled = false;
                 startButtonEnabled = true;
+                playing = false;
                 _controller.reset();
                 counter = 0;
               });
@@ -297,6 +316,7 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
               setState(() {
                 stopButtonEnabled = true;
                 startButtonEnabled = false;
+                playing = true;
                 //_controller.repeat();
               });
             }
