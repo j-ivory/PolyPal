@@ -1,10 +1,11 @@
-# polypal
+# PolyPal
 
-A new Flutter project.
+Learn Polyrhythms Practically
 
-## Getting Started
+## Listen, Learn, and Train your polyrhythms
 
-This project is a starting point for a Flutter application.
+This project uses the Flutter framework
+
 
 A few resources to get you started if this is your first Flutter project:
 

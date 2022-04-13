@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:polypal/models/functions.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -70,10 +71,17 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
           _controller.repeat();
         }
         if (counter % subDiv2 == 0) {
-          SystemSound.play(SystemSoundType.click); //play subdiv1
+          //SystemSound.play(SystemSoundType.click); //play subdiv1
+          //SFXPlayer.playClave1SFX();
+          //FlutterBeep.beep(false);
+          handlePulse1();
         }
-        if (counter % subDiv1 == 0 && counter % subDiv2 != 0) {
-          SystemSound.play(SystemSoundType.click); //play subdiv2
+        if (counter % subDiv1 == 0) {
+          //&& counter % subDiv2 != 0) {
+          //SystemSound.play(SystemSoundType.click);
+          //SFXPlayer.playClave2SFX(); //play subdiv2
+          //FlutterBeep.beep();
+          handlePulse2();
         }
         _timer = timer;
         counter++;
