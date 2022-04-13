@@ -124,6 +124,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
                     },
                   ),
                 ),
+                const Spacer(),
+                trainButton(context),
                 const Spacer(flex: 12),
               ],
             ),
@@ -132,4 +134,50 @@ class _LaunchScreenState extends State<LaunchScreen> {
       ),
     );
   }
+}
+
+Widget trainButton(context) {
+  return OutlinedButton(
+      onPressed: () {
+        SFXPlayer.playLaunchSFX();
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(seconds: 2),
+            pageBuilder: (_, __, ___) => const TrainScreen(),
+          ),
+        );
+      },
+      child: const Text('Train',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w600,
+            color: //Color.fromARGB(255, 255, 191,0),
+                Color.fromARGB(255, 76, 108, 119),
+          )) //AnimatedTextKit(
+      //   animatedTexts: [
+      //     WavyAnimatedText(
+      //       'Train',
+      //       textStyle: const TextStyle(
+      //         fontSize: 30,
+      //         fontWeight: FontWeight.w600,
+      //         color: //Color.fromARGB(255, 255, 191,0),
+      //             Color.fromARGB(255, 76, 108, 119),
+      //       ),
+      //     ),
+      //     //WavyAnimatedText('Second Text'),
+      //   ],
+      //   isRepeatingAnimation: true,
+      //   onTap: () {
+      //     SFXPlayer.playLaunchSFX();
+      //     Navigator.push(
+      //       context,
+      //       PageRouteBuilder(
+      //         transitionDuration: const Duration(seconds: 2),
+      //         pageBuilder: (_, __, ___) => const TrainScreen(),
+      //       ),
+      //     );
+      //   },
+      // ),
+      );
 }
