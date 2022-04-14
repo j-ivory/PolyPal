@@ -101,7 +101,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                   child: AnimatedTextKit(
                     animatedTexts: [
                       WavyAnimatedText(
-                        'Learn',
+                        'Polynome',
                         textStyle: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
