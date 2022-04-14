@@ -24,6 +24,9 @@ class _TrainScreenState extends State<TrainScreen> {
   int reaction = 0;
   int time = 0;
   int durMil = 500;
+  bool isStarted = false;
+
+  PolyTimer poly = PolyTimer();
 
   int getTime() {
     return reactionStopwatch.elapsedMilliseconds;
@@ -56,9 +59,6 @@ class _TrainScreenState extends State<TrainScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    Timer.periodic(Duration(milliseconds: durMil), (timer) {
-      callbackFunction();
-    });
     reactionStopwatch.start();
     super.initState();
   }
@@ -96,6 +96,7 @@ class _TrainScreenState extends State<TrainScreen> {
                   stopwatch.reset();
                   reactionStopwatch.stop();
                   reactionStopwatch.reset();
+                  poly.disposePolyTimer();
                   //dispose();
                 },
                 child: Hero(
@@ -166,6 +167,27 @@ class _TrainScreenState extends State<TrainScreen> {
           ),
         ),
       ),
+      floatingActionButton: ElevatedButton.icon(
+        onPressed: () {
+          if (!isStarted) {
+            poly.createPolyTimer(150, 2, 3, handlePulse1, handlePulse2, () {});
+            setState(() {
+              isStarted = true;
+            });
+          } else {
+            poly.disposePolyTimer();
+            setState(() {
+              isStarted = false;
+            });
+          }
+        },
+        icon: isStarted ? const Icon(Icons.stop) : const Icon(Icons.start),
+        label: isStarted ? const Text('Stop') : const Text('Start'),
+      ),
     );
   }
 }
+
+////TODO:
+///-isolate
+///-
