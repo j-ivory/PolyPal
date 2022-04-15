@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:polypal/models/functions.dart';
+import 'package:polypal/models/PolyTimer.dart';
 import 'dart:async';
 import 'dart:math' as math;
 

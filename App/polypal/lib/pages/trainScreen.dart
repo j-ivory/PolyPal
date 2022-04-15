@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:polypal/pages/launchScreen.dart';
-import 'package:polypal/models/functions.dart';
+import 'package:polypal/models/PolyTimer.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 
 class TrainScreen extends StatefulWidget {
@@ -20,38 +20,53 @@ class _TrainScreenState extends State<TrainScreen> {
   int start = 0;
   int stop = 0;
   int dif = 0;
-  Color stateColor = Colors.teal;
-  int reaction = 0;
+  Color stateColor1 = Colors.white;
+  Color stateColor2 = Colors.white;
+  int reaction1 = 0;
+  int reaction2 = 0;
   int time = 0;
-  int durMil = 500;
+  //int durMil = 500;
   bool isStarted = false;
+
+  double _bpmSliderValue = 20;
+  int subD1 = 2;
+  int subD2 = 3;
 
   PolyTimer poly = PolyTimer();
 
-  int getTime() {
-    return reactionStopwatch.elapsedMilliseconds;
-  }
+  // int getTime() {
+  //   return reactionStopwatch.elapsedMilliseconds;
+  // }
 
-  int compareTime() {
-    int cmp = getTime() - time;
-    if (cmp > durMil / 2) {
-      return cmp - durMil;
-    }
-    return cmp;
-    //return getTime() - time;
-  }
+  // int compareTime() {
+  //   int cmp = getTime() - time;
+  //   if (cmp > durMil / 2) {
+  //     return cmp - durMil;
+  //   }
+  //   return cmp;
+  //   //return getTime() - time;
+  // }
 
   void callbackFunction() {
+    FlutterBeep.playSysSound(iOSSoundIDs.TouchTone1);
     setState(() {
-      stateColor = Colors.tealAccent;
-      time = getTime();
-      //handlePulse1();
-      FlutterBeep.playSysSound(iOSSoundIDs.TouchTone12);
-      //print('$time');
-      Future.delayed(const Duration(milliseconds: 100), () {
-        setState(() {
-          stateColor = Colors.teal;
-        });
+      stateColor1 = Colors.teal;
+    });
+    Future.delayed(const Duration(milliseconds: 150), () {
+      setState(() {
+        stateColor1 = Colors.white;
+      });
+    });
+  }
+
+  void callbackFunction2() {
+    FlutterBeep.playSysSound(iOSSoundIDs.TouchTone2);
+    setState(() {
+      stateColor2 = Colors.teal;
+    });
+    Future.delayed(const Duration(milliseconds: 150), () {
+      setState(() {
+        stateColor2 = Colors.white;
       });
     });
   }
@@ -124,45 +139,204 @@ class _TrainScreenState extends State<TrainScreen> {
                 ),
               ),
               const Spacer(),
-              Container(
-                height: 100,
-                width: 100,
-                color: stateColor,
+              Row(
+                children: [
+                  const Spacer(),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: stateColor1,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: SizedBox(
+                      height: 70,
+                      width: 70,
+                      child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: const [
+                          Text(
+                            'L',
+                            style: TextStyle(
+                                color: Colors.tealAccent, fontSize: 65),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: stateColor2,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: SizedBox(
+                      height: 70,
+                      width: 70,
+                      child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: const [
+                          Text(
+                            'R',
+                            style: TextStyle(
+                                color: Colors.amberAccent, fontSize: 65),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
               ),
               const Spacer(),
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    reaction = compareTime();
-                  });
-                },
-                icon: const Icon(Icons.timeline_rounded),
-                label: const Text('Reaction'),
+              Row(
+                children: [
+                  const Spacer(),
+                  Column(
+                    children: [
+                      Text('$reaction1'),
+                      AnimatedContainer(
+                        height: 70,
+                        width: 70,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeIn,
+                        child: Material(
+                          color: Colors.tealAccent,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                //sideLength == 50 ? sideLength = 100 : sideLength = 50;
+                                reaction1 = poly.compareTime1();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      Text('$reaction2'),
+                      AnimatedContainer(
+                        height: 70,
+                        width: 70,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeIn,
+                        child: Material(
+                          color: Colors.yellow,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                //sideLength == 50 ? sideLength = 100 : sideLength = 50;
+                                reaction2 = poly.compareTime2();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                ],
               ),
-              Text('$reaction'),
               const Spacer(),
-              ElevatedButton.icon(
-                onPressed: state
-                    ? () {
-                        stopwatch.stop();
-                        stop = stopwatch.elapsedMilliseconds;
-                        setState(() {
-                          dif = stop - start;
-                          state = !state;
-                        });
-                      }
-                    : () {
-                        stopwatch.start();
-                        start = stopwatch.elapsedMilliseconds;
-                        setState(() {
-                          state = !state;
-                        });
-                      },
-                icon: const Icon(Icons.join_full_sharp),
-                label: const Text('Time Difference'),
-              ),
-              Text('$dif'),
+              // ElevatedButton.icon(
+              //   onPressed: state
+              //       ? () {
+              //           stopwatch.stop();
+              //           stop = stopwatch.elapsedMilliseconds;
+              //           setState(() {
+              //             dif = stop - start;
+              //             state = !state;
+              //           });
+              //         }
+              //       : () {
+              //           stopwatch.start();
+              //           start = stopwatch.elapsedMilliseconds;
+              //           setState(() {
+              //             state = !state;
+              //           });
+              //         },
+              //   icon: const Icon(Icons.join_full_sharp),
+              //   label: const Text('Time Difference'),
+              // ),
+              // Text('$dif'),
               const Spacer(flex: 2),
+              Row(
+                children: [
+                  const Spacer(),
+                  DropdownButton<int>(
+                    iconEnabledColor: Colors.tealAccent,
+                    dropdownColor: Colors.tealAccent,
+                    //Don't forget to pass your variable to the current value
+                    value: subD1,
+                    items: <int>[1, 2, 3, 4, 5, 6, 7].map((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text('$value'),
+                      );
+                    }).toList(),
+                    //On changed update the variable name and don't forgot the set state!
+                    onChanged: !isStarted
+                        ? (newValue) {
+                            //SystemSound.play(SystemSoundType.click);
+                            setState(() {
+                              subD1 = newValue!;
+                            });
+                          }
+                        : null,
+                  ),
+                  const Spacer(),
+                  const Text(
+                    'BPM',
+                    style: TextStyle(color: Colors.teal),
+                  ),
+                  Slider(
+                    value: _bpmSliderValue,
+                    min: 20,
+                    max: 220,
+                    divisions: 5,
+                    label: _bpmSliderValue.round().toString(),
+                    onChanged: (value) {
+                      setState(() {
+                        _bpmSliderValue = value;
+                        poly.disposePolyTimer();
+                        setState(() {
+                          isStarted = false;
+                        });
+                        //start
+                        poly.createPolyTimer(_bpmSliderValue.round(), subD1,
+                            subD2, callbackFunction, callbackFunction2, () {});
+                        setState(() {
+                          isStarted = true;
+                        });
+                      });
+                    },
+                  ),
+                  const Spacer(),
+                  //const SizedBox(width: 32),
+                  DropdownButton<int>(
+                    iconEnabledColor: Colors.amberAccent,
+                    dropdownColor: Colors.amberAccent,
+                    //Don't forget to pass your variable to the current value
+                    value: subD2,
+                    items: <int>[1, 2, 3, 4, 5, 6, 7].map((int value) {
+                      return DropdownMenuItem<int>(
+                        value: value,
+                        child: Text('$value'),
+                      );
+                    }).toList(),
+                    //On changed update the variable name and don't forgot the set state!
+                    onChanged: !isStarted
+                        ? (newValue) {
+                            //SystemSound.play(SystemSoundType.click);
+                            setState(() {
+                              subD2 = newValue!;
+                            });
+                          }
+                        : null,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              const Spacer(),
             ],
           ),
         ),
@@ -170,7 +344,8 @@ class _TrainScreenState extends State<TrainScreen> {
       floatingActionButton: ElevatedButton.icon(
         onPressed: () {
           if (!isStarted) {
-            poly.createPolyTimer(150, 2, 3, handlePulse1, handlePulse2, () {});
+            poly.createPolyTimer(_bpmSliderValue.round(), subD1, subD2,
+                callbackFunction, callbackFunction2, () {});
             setState(() {
               isStarted = true;
             });
@@ -181,7 +356,7 @@ class _TrainScreenState extends State<TrainScreen> {
             });
           }
         },
-        icon: isStarted ? const Icon(Icons.stop) : const Icon(Icons.start),
+        icon: isStarted ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
         label: isStarted ? const Text('Stop') : const Text('Start'),
       ),
     );
