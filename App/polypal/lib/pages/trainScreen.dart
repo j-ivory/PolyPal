@@ -35,6 +35,7 @@ class _TrainScreenState extends State<TrainScreen> {
   PolyTimer poly = PolyTimer();
 
   bool selected = false;
+  bool selected2 = false;
 
   // int getTime() {
   //   return reactionStopwatch.elapsedMilliseconds;
@@ -59,6 +60,9 @@ class _TrainScreenState extends State<TrainScreen> {
       setState(() {
         stateColor1 = Colors.white;
       });
+    });
+    Future.delayed(Duration(milliseconds: poly.getDuration1()), () {
+      selected2 = !selected2;
     });
   }
 
@@ -161,8 +165,22 @@ class _TrainScreenState extends State<TrainScreen> {
                         },
                         child: Icon(
                           Icons.circle,
-                          color: Colors.tealAccent,
+                          color: Colors.teal,
                         ),
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      left: 0,
+                      bottom: !selected ? 8 : 300.0,
+                      duration: Duration(milliseconds: poly.getDuration1()),
+                      //curve: Curves.bounceIn,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected2 = !selected2;
+                          });
+                        },
+                        child: Icon(Icons.circle, color: Colors.teal),
                       ),
                     ),
                     const Positioned(
