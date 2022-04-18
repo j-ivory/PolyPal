@@ -39,6 +39,18 @@ class PolyTimer {
     });
   }
 
+  int getDuration1([int fraction = 1]) {
+    double x = 60000 / bpmSet * 4 / sd1 / fraction;
+    if (x < 0 || x > 10000) return 0;
+    return x.round();
+  }
+
+  int getDuration2([int fraction = 1]) {
+    double x = 60000 / bpmSet * 4 / sd2 / fraction;
+    if (x < 0 || x > 10000) return 0;
+    return x.round();
+  }
+
   void resetTimer(int bpm, int sd1, int sd2, Function fireP1, Function fireP2) {
     disposePolyTimer();
     createPolyTimer(bpmSet, sd1, sd2, fireP1, fireP2);

@@ -34,6 +34,8 @@ class _TrainScreenState extends State<TrainScreen> {
 
   PolyTimer poly = PolyTimer();
 
+  bool selected = false;
+
   // int getTime() {
   //   return reactionStopwatch.elapsedMilliseconds;
   // }
@@ -51,6 +53,7 @@ class _TrainScreenState extends State<TrainScreen> {
     FlutterBeep.playSysSound(iOSSoundIDs.TouchTone1);
     setState(() {
       stateColor1 = Colors.teal;
+      selected = !selected;
     });
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
@@ -139,6 +142,34 @@ class _TrainScreenState extends State<TrainScreen> {
                 ),
               ),
               const Spacer(),
+              SizedBox(
+                width: 200,
+                height: 350,
+                child: Stack(
+                  //lignment: Alignment.,
+                  children: <Widget>[
+                    AnimatedPositioned(
+                      left: 0,
+                      bottom: selected ? 8 : 300.0,
+                      duration: Duration(milliseconds: poly.getDuration1()),
+                      //curve: Curves.bounceIn,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected = !selected;
+                          });
+                        },
+                        child: Icon(
+                          Icons.circle,
+                          color: Colors.tealAccent,
+                        ),
+                      ),
+                    ),
+                    const Positioned(
+                        bottom: 8, left: 0, child: Icon(Icons.circle_outlined)),
+                  ],
+                ),
+              ),
               Row(
                 children: [
                   const Spacer(),
