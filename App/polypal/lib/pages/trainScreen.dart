@@ -36,6 +36,8 @@ class _TrainScreenState extends State<TrainScreen> {
 
   bool selected = false;
   bool selected2 = false;
+  bool selectedB = false;
+  bool selectedB2 = false;
 
   // int getTime() {
   //   return reactionStopwatch.elapsedMilliseconds;
@@ -72,6 +74,12 @@ class _TrainScreenState extends State<TrainScreen> {
     FlutterBeep.playSysSound(iOSSoundIDs.TouchTone2);
     setState(() {
       stateColor2 = Colors.teal;
+      selectedB = !selectedB;
+    });
+    Future.delayed(Duration(milliseconds: poly.getDuration2()), () {
+      setState(() {
+        selectedB2 = !selectedB2;
+      });
     });
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
@@ -200,21 +208,15 @@ class _TrainScreenState extends State<TrainScreen> {
                 height: 350,
                 child: Stack(
                   children: <Widget>[
+                    //LEFT
                     AnimatedPositioned(
                       left: 0,
                       bottom: selected ? 8 : 300.0,
                       duration: Duration(milliseconds: poly.getDuration1()),
                       //curve: Curves.bounceIn,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected = !selected;
-                          });
-                        },
-                        child: Icon(
-                          Icons.circle,
-                          color: selected ? Colors.teal : Colors.transparent,
-                        ),
+                      child: Icon(
+                        Icons.circle,
+                        color: selected ? Colors.teal : Colors.transparent,
                       ),
                     ),
                     AnimatedPositioned(
@@ -222,20 +224,36 @@ class _TrainScreenState extends State<TrainScreen> {
                       bottom: !selected ? 8 : 300.0,
                       duration: Duration(milliseconds: poly.getDuration1()),
                       //curve: Curves.bounceIn,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected2 = !selected2;
-                          });
-                        },
-                        child: Icon(Icons.circle,
-                            color:
-                                selected2 ? Colors.teal : Colors.transparent),
-                      ),
+                      child: Icon(Icons.circle,
+                          color: selected2 ? Colors.teal : Colors.transparent),
                     ),
                     //beat marker icon
                     const Positioned(
                         bottom: 8, left: 0, child: Icon(Icons.circle_outlined)),
+                    //RIGHT
+                    AnimatedPositioned(
+                      right: 0,
+                      bottom: selectedB ? 8 : 300.0,
+                      duration: Duration(milliseconds: poly.getDuration2()),
+                      //curve: Curves.bounceIn,
+                      child: Icon(
+                        Icons.circle,
+                        color: selectedB ? Colors.teal : Colors.transparent,
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      right: 0,
+                      bottom: !selectedB ? 8 : 300.0,
+                      duration: Duration(milliseconds: poly.getDuration2()),
+                      //curve: Curves.bounceIn,
+                      child: Icon(Icons.circle,
+                          color: selectedB2 ? Colors.teal : Colors.transparent),
+                    ),
+                    //beat marker icon
+                    const Positioned(
+                        bottom: 8,
+                        right: 0,
+                        child: Icon(Icons.circle_outlined)),
                   ],
                 ),
               ),
