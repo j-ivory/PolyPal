@@ -12,7 +12,21 @@ class TrainScreen extends StatefulWidget {
   State<TrainScreen> createState() => _TrainScreenState();
 }
 
-class _TrainScreenState extends State<TrainScreen> {
+class _TrainScreenState extends State<TrainScreen>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 500),
+    vsync: this,
+  )..repeat(reverse: false);
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: Offset.zero,
+    end: const Offset(0, 5),
+  ).animate(_controller);
+
+  late AnimationController _myController;
+  late Animation positionAnimation =
+      IntTween(begin: 100, end: 8).animate(_myController);
+
   //timer/stopwatch
   Stopwatch stopwatch = Stopwatch();
   Stopwatch reactionStopwatch = Stopwatch();
@@ -56,6 +70,7 @@ class _TrainScreenState extends State<TrainScreen> {
       stateColor1 = Colors.teal;
       selected = !selected;
     });
+
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
         stateColor1 = Colors.white;
@@ -71,6 +86,7 @@ class _TrainScreenState extends State<TrainScreen> {
     setState(() {
       stateColor2 = Colors.teal;
     });
+    _myController.repeat();
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
         stateColor2 = Colors.white;
@@ -82,6 +98,19 @@ class _TrainScreenState extends State<TrainScreen> {
   void initState() {
     // TODO: implement initState
     reactionStopwatch.start();
+
+    _myController = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+    //_positionAnimation = Tween()
+
+    _myController.addListener(() {
+      print(_myController.value);
+      setState(() {});
+    });
+    //_myController.forward();
+
     super.initState();
   }
 
@@ -152,37 +181,18 @@ class _TrainScreenState extends State<TrainScreen> {
                 child: Stack(
                   //lignment: Alignment.,
                   children: <Widget>[
-                    AnimatedPositioned(
-                      left: 0,
-                      bottom: selected ? 8 : 300.0,
-                      duration: Duration(milliseconds: poly.getDuration1()),
-                      //curve: Curves.bounceIn,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected = !selected;
-                          });
-                        },
-                        child: Icon(
-                          Icons.circle,
-                          color: Colors.teal,
-                        ),
-                      ),
-                    ),
-                    AnimatedPositioned(
-                      left: 0,
-                      bottom: !selected ? 8 : 300.0,
-                      duration: Duration(milliseconds: poly.getDuration1()),
-                      //curve: Curves.bounceIn,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected2 = !selected2;
-                          });
-                        },
-                        child: Icon(Icons.circle, color: Colors.teal),
-                      ),
-                    ),
+                    // SlideTransition(
+                    //   position: _myOffsetAnimation,
+                    //   child: const Padding(
+                    //     padding: EdgeInsets.all(8.0),
+                    //     child: Icon(Icons.circle),
+                    //   ),
+                    // ),
+                    Positioned(
+                        bottom: positionAnimation.value.toDouble(),
+                        left: 0,
+                        child: const Icon(Icons.circle)),
+
                     const Positioned(
                         bottom: 8, left: 0, child: Icon(Icons.circle_outlined)),
                   ],
@@ -385,29 +395,52 @@ class _TrainScreenState extends State<TrainScreen> {
                   const Spacer(),
                 ],
               ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  if (!isStarted) {
+                    poly.createPolyTimer(_bpmSliderValue.round(), subD1, subD2,
+                        callbackFunction, callbackFunction2, () {});
+                    _myController = AnimationController(
+                        vsync: this,
+                        duration: Duration(milliseconds: poly.getDuration1()));
+                    setState(() {
+                      isStarted = true;
+                    });
+                  } else {
+                    poly.disposePolyTimer();
+                    setState(() {
+                      isStarted = false;
+                    });
+                  }
+                },
+                icon: isStarted
+                    ? const Icon(Icons.stop)
+                    : const Icon(Icons.play_arrow),
+                label: isStarted ? const Text('Stop') : const Text('Start'),
+              ),
               const Spacer(),
             ],
           ),
         ),
       ),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () {
-          if (!isStarted) {
-            poly.createPolyTimer(_bpmSliderValue.round(), subD1, subD2,
-                callbackFunction, callbackFunction2, () {});
-            setState(() {
-              isStarted = true;
-            });
-          } else {
-            poly.disposePolyTimer();
-            setState(() {
-              isStarted = false;
-            });
-          }
-        },
-        icon: isStarted ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
-        label: isStarted ? const Text('Stop') : const Text('Start'),
-      ),
+      // floatingActionButton: ElevatedButton.icon(
+      //   onPressed: () {
+      //     if (!isStarted) {
+      //       poly.createPolyTimer(_bpmSliderValue.round(), subD1, subD2,
+      //           callbackFunction, callbackFunction2, () {});
+      //       setState(() {
+      //         isStarted = true;
+      //       });
+      //     } else {
+      //       poly.disposePolyTimer();
+      //       setState(() {
+      //         isStarted = false;
+      //       });
+      //     }
+      //   },
+      //   icon: isStarted ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+      //   label: isStarted ? const Text('Stop') : const Text('Start'),
+      // ),
     );
   }
 }
