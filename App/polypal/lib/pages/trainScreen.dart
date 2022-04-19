@@ -86,7 +86,7 @@ class _TrainScreenState extends State<TrainScreen>
     setState(() {
       stateColor2 = Colors.teal;
     });
-    _myController.repeat();
+    _myController.forward();
     Future.delayed(const Duration(milliseconds: 150), () {
       setState(() {
         stateColor2 = Colors.white;
@@ -108,6 +108,10 @@ class _TrainScreenState extends State<TrainScreen>
     _myController.addListener(() {
       print(_myController.value);
       setState(() {});
+      if (_myController.value >= 0.9) {
+        _myController.reset();
+        //_myController.forward();
+      }
     });
     //_myController.forward();
 
@@ -363,6 +367,9 @@ class _TrainScreenState extends State<TrainScreen>
                         //start
                         poly.createPolyTimer(_bpmSliderValue.round(), subD1,
                             subD2, callbackFunction, callbackFunction2, () {});
+                        _myController.duration =
+                            Duration(milliseconds: poly.getDuration1());
+
                         setState(() {
                           isStarted = true;
                         });
