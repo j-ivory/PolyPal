@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:polypal/pages/launchScreen.dart';
@@ -38,6 +39,10 @@ class _TrainScreenState extends State<TrainScreen> {
   bool selected2 = false;
   bool selectedB = false;
   bool selectedB2 = false;
+  bool isPressed = false;
+  bool isPressed2 = false;
+
+  Color thumbColor = Colors.transparent;
 
   // int getTime() {
   //   return reactionStopwatch.elapsedMilliseconds;
@@ -229,7 +234,9 @@ class _TrainScreenState extends State<TrainScreen> {
                     ),
                     //beat marker icon
                     const Positioned(
-                        bottom: 8, left: 0, child: Icon(Icons.circle_outlined)),
+                        bottom: 8,
+                        left: 0,
+                        child: Icon(Icons.circle_outlined, color: Colors.teal)),
                     //RIGHT
                     AnimatedPositioned(
                       right: 0,
@@ -253,7 +260,7 @@ class _TrainScreenState extends State<TrainScreen> {
                     const Positioned(
                         bottom: 8,
                         right: 0,
-                        child: Icon(Icons.circle_outlined)),
+                        child: Icon(Icons.circle_outlined, color: Colors.teal)),
                   ],
                 ),
               ),
@@ -263,7 +270,33 @@ class _TrainScreenState extends State<TrainScreen> {
                   const Spacer(),
                   Column(
                     children: [
-                      Text('$reaction1'),
+                      //Text('$reaction1'),
+                      // SliderTheme(
+                      //   data: const SliderThemeData(
+                      //     thumbColor: Colors.black,
+                      //     thumbShape:
+                      //         RoundSliderThumbShape(enabledThumbRadius: 4),
+                      //     activeTrackColor: Colors.grey,
+
+                      //     inactiveTrackColor: Colors.grey,
+                      //   ),
+                      //   child: Slider(
+                      //     min: -poly.getDuration1(2).toDouble(),
+                      //     max: poly.getDuration1(2).toDouble(),
+                      //     value: reaction1.toDouble(),
+                      //     onChanged: (val) {},
+                      //   ),
+                      // ),
+                      !isPressed
+                          ? const Icon(Icons.thumbs_up_down,
+                              color: Colors.transparent)
+                          : Icon(
+                              reaction1 <= 150 && reaction1 >= -150
+                                  ? Icons.thumb_up_rounded
+                                  : Icons.thumb_down_rounded,
+                              color: reaction1 <= 150 && reaction1 >= -150
+                                  ? Colors.green
+                                  : Colors.red),
                       AnimatedContainer(
                         height: 70,
                         width: 70,
@@ -271,13 +304,30 @@ class _TrainScreenState extends State<TrainScreen> {
                         curve: Curves.easeIn,
                         child: Material(
                           color: Colors.tealAccent,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                //sideLength == 50 ? sideLength = 100 : sideLength = 50;
-                                reaction1 = poly.compareTime1();
-                              });
-                            },
+                          child: Stack(
+                            children: <Widget>[
+                              Center(
+                                  child: Text("Tap",
+                                      style: TextStyle(
+                                          color: Colors.teal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20))),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isPressed = true;
+                                    //sideLength == 50 ? sideLength = 100 : sideLength = 50;
+                                    reaction1 = poly.compareTime1();
+                                    Future.delayed(
+                                        Duration(
+                                            milliseconds:
+                                                poly.getDuration1() - 150), () {
+                                      reaction1 = -12118702;
+                                    });
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -286,7 +336,17 @@ class _TrainScreenState extends State<TrainScreen> {
                   const Spacer(),
                   Column(
                     children: [
-                      Text('$reaction2'),
+                      //Text(accuracyString(reaction2, 150)),
+                      !isPressed2
+                          ? const Icon(Icons.thumbs_up_down,
+                              color: Colors.transparent)
+                          : Icon(
+                              reaction2 <= 150 && reaction2 >= -150
+                                  ? Icons.thumb_up_rounded
+                                  : Icons.thumb_down_rounded,
+                              color: reaction2 <= 150 && reaction2 >= -150
+                                  ? Colors.green
+                                  : Colors.red),
                       AnimatedContainer(
                         height: 70,
                         width: 70,
@@ -294,14 +354,29 @@ class _TrainScreenState extends State<TrainScreen> {
                         curve: Curves.easeIn,
                         child: Material(
                           color: Colors.yellow,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                //sideLength == 50 ? sideLength = 100 : sideLength = 50;
-                                reaction2 = poly.compareTime2();
-                              });
-                            },
-                          ),
+                          child: Stack(children: <Widget>[
+                            Center(
+                                child: Text("Tap",
+                                    style: TextStyle(
+                                        color: Colors.teal,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20))),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  //sideLength == 50 ? sideLength = 100 : sideLength = 50;
+                                  isPressed2 = true;
+                                  reaction2 = poly.compareTime2();
+                                  Future.delayed(
+                                      Duration(
+                                          milliseconds:
+                                              poly.getDuration2() - 150), () {
+                                    reaction2 = -12118702;
+                                  });
+                                });
+                              },
+                            ),
+                          ]),
                         ),
                       ),
                     ],
@@ -421,6 +496,8 @@ class _TrainScreenState extends State<TrainScreen> {
                     poly.disposePolyTimer();
                     setState(() {
                       isStarted = false;
+                      isPressed = false;
+                      isPressed2 = false;
                     });
                   }
                 },
@@ -435,6 +512,24 @@ class _TrainScreenState extends State<TrainScreen> {
         ),
       ),
     );
+  }
+}
+
+List<String> positiveFeedback = ["Nice!", "Good!", "Perfect!"];
+int max = positiveFeedback.length;
+int randomNumber = Random().nextInt(max);
+int counter = 0;
+
+String accuracyString(int reaction, int limit) {
+  if (reaction < -limit) return "Early";
+  if (reaction > limit) return "Late";
+  if (reaction == 0) {
+    return "";
+  }
+  if (reaction == -12118702) {
+    return "Miss";
+  } else {
+    return positiveFeedback[counter % max];
   }
 }
 
