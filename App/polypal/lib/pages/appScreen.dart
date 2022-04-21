@@ -283,12 +283,15 @@ class _AppScreenState extends State<AppScreen> with TickerProviderStateMixin {
                     ],
                   ),
                   const Spacer(),
+
                 ],
               ),
             ),
           )),
     );
   }
+
+  Widget 
 
   TextButton stopButton() {
     return TextButton.icon(
